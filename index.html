@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>株式会社おだじん｜ドローン農薬散布サービス</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil: #6B4C2A; --soil-light: #C4956A; --soil-pale: #F5EDE0;
+    --sky: #4A90C4; --sky-light: #B8D9F0; --sky-pale: #EBF5FB;
+    --green: #3A7D44; --green-light: #7BBD85; --green-pale: #EAF5EC;
+    --rice: #D4A843; --white: #FDFAF5;
+    --text: #2C1F0E; --text-mid: #6B5540; --text-light: #9B8070;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--white); color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: var(--white); border-bottom: 1px solid #E8DDD0; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 16px; color: var(--green); letter-spacing: 0.03em; }
+  .nav-logo span { font-size: 11px; color: var(--text-light); display: block; font-family: 'Noto Sans JP', sans-serif; font-weight: 400; letter-spacing: 0.1em; }
+  .nav-cta { background: var(--green); color: white; font-weight: 700; font-size: 13px; padding: 8px 20px; border-radius: 20px; text-decoration: none; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 560px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 70px 24px 100px; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('IMG_5089.jpg');
+    background-size: cover; background-position: center 40%;
+    filter: brightness(0.45);
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+    background: var(--white); clip-path: ellipse(55% 100% at 50% 100%); z-index: 3;
+  }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: #E8F5D0; font-size: 12px; letter-spacing: 0.1em; padding: 5px 16px; border-radius: 20px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Noto Serif JP', serif; font-size: clamp(28px, 5vw, 46px); font-weight: 700; color: #FDFAF5; line-height: 1.4; margin-bottom: 16px; text-shadow: 0 2px 16px rgba(0,0,0,0.5); }
+  .hero h1 span { color: #B8E878; }
+  .hero p { font-size: clamp(14px, 2vw, 16px); color: rgba(255,255,255,0.85); max-width: 440px; margin: 0 auto 32px; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+  .hero-cta { display: inline-block; background: var(--rice); color: var(--white); font-weight: 700; font-size: 16px; padding: 14px 40px; border-radius: 40px; text-decoration: none; letter-spacing: 0.05em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
+
+  section { padding: 64px 24px; max-width: 820px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: 0.15em; color: var(--green); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-family: 'Noto Serif JP', serif; font-size: clamp(22px, 3vw, 30px); font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.4; }
+  .section-sub { color: var(--text-mid); font-size: 15px; margin-bottom: 40px; max-width: 520px; }
+
+  .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+  .tag { background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 1px solid #C0DDB8; }
+
+  /* SPEC BAR */
+  .spec-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 40px; }
+  .spec-item { background: #F0F7F1; border-radius: 10px; padding: 16px 14px; text-align: center; border: 1px solid #C8E0CC; }
+  .spec-num { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: var(--green); line-height: 1; }
+  .spec-unit { font-size: 12px; color: var(--green); }
+  .spec-label { font-size: 12px; color: var(--text-mid); margin-top: 4px; }
+
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .feature-card { background: var(--white); border: 1.5px solid #E8DDD0; border-radius: var(--radius); padding: 28px 24px; transition: border-color 0.2s, transform 0.2s; }
+  .feature-card:hover { border-color: var(--green-light); transform: translateY(-3px); }
+  .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 24px; }
+  .feature-card h3 { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+  /* OPERATOR */
+  .operator-wrap { background: var(--soil-pale); border-radius: 20px; padding: 48px 40px; display: flex; gap: 40px; align-items: center; max-width: 820px; margin: 0 auto 64px; }
+  @media (max-width: 600px) { .operator-wrap { flex-direction: column; text-align: center; padding: 36px 24px; gap: 28px; } }
+  .operator-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; border: 4px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+  .operator-info .section-label { color: var(--soil); }
+  .operator-name { font-family: 'Noto Serif JP', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .operator-name-en { font-size: 13px; color: var(--text-light); letter-spacing: 0.1em; margin-bottom: 16px; }
+  .operator-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .operator-badge { background: var(--soil); color: white; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.05em; }
+  .operator-badge.green { background: var(--green); }
+  .operator-desc { font-size: 14px; color: var(--text-mid); line-height: 1.85; }
+  .operator-quote { font-family: 'Noto Serif JP', serif; font-size: 16px; color: var(--soil); font-weight: 600; margin-top: 14px; padding-left: 14px; border-left: 3px solid var(--soil-light); line-height: 1.7; }
+
+  /* PRICE */
+  .price-section { background: var(--soil-pale); border-radius: 20px; padding: 48px 32px; margin: 0 auto; max-width: 820px; }
+  .price-note { font-size: 13px; color: var(--text-light); margin-bottom: 32px; }
+  .price-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+  @media (max-width: 520px) { .price-cards { grid-template-columns: 1fr; } }
+  .price-card { background: white; border-radius: 16px; padding: 32px 28px; text-align: center; border: 2px solid #E8DDD0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+  .price-card:hover { transform: translateY(-4px); border-color: var(--green-light); }
+  .price-card-badge { position: absolute; top: 16px; right: -24px; background: var(--green); color: white; font-size: 11px; font-weight: 700; padding: 4px 36px; transform: rotate(35deg); letter-spacing: 0.05em; }
+  .price-card-icon { margin-bottom: 12px; display: flex; align-items: center; justify-content: center; height: 52px; }
+  .price-card-name { font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .price-card-sub { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+  .price-card-amount { font-size: 42px; font-weight: 700; color: var(--green); font-family: 'Noto Serif JP', serif; line-height: 1; }
+  .price-card-amount span { font-size: 16px; color: var(--text-mid); font-family: 'Noto Sans JP', sans-serif; font-weight: 400; }
+  .price-card-unit { font-size: 13px; color: var(--text-light); margin-top: 8px; }
+  .area-wrap { background: var(--sky-pale); border-radius: 16px; padding: 24px 28px; border: 1.5px solid var(--sky-light); margin-top: 8px; }
+  .area-wrap h3 { font-family: 'Noto Serif JP', serif; font-size: 16px; font-weight: 700; color: var(--sky); margin-bottom: 8px; }
+  .area-wrap p { font-size: 14px; color: var(--text-mid); }
+
+  /* FLOW */
+  .flow-list { display: flex; flex-direction: column; }
+  .flow-item { display: flex; gap: 20px; padding-bottom: 32px; position: relative; }
+  .flow-item::before { content: ''; position: absolute; left: 19px; top: 40px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--green-light), var(--sky-light)); }
+  .flow-item:last-child::before { display: none; }
+  .flow-num { width: 40px; height: 40px; border-radius: 50%; background: var(--green); color: white; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; z-index: 1; }
+  .flow-content h3 { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; padding-top: 8px; }
+  .flow-content p { font-size: 14px; color: var(--text-mid); }
+
+  /* CONTACT */
+  .contact-wrap { background: linear-gradient(145deg, #1A3A2A, #2B5F3E); border-radius: 20px; padding: 48px 32px; text-align: center; color: white; max-width: 820px; margin: 0 auto 64px; }
+  .contact-wrap .section-label { color: #B8E878; }
+  .contact-wrap .section-title { color: white; margin-bottom: 8px; }
+  .contact-wrap .section-sub { color: rgba(255,255,255,0.7); margin: 0 auto 32px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 480px; margin: 0 auto 16px; }
+  @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-grid input, .contact-full textarea { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 12px 14px; color: white; font-size: 14px; width: 100%; font-family: 'Noto Sans JP', sans-serif; outline: none; transition: border-color 0.2s; }
+  .contact-grid input::placeholder, .contact-full textarea::placeholder { color: rgba(255,255,255,0.45); }
+  .contact-grid input:focus, .contact-full textarea:focus { border-color: rgba(255,255,255,0.6); }
+  .contact-full { max-width: 480px; margin: 0 auto 16px; }
+  .contact-full textarea { resize: vertical; min-height: 100px; }
+  .submit-btn { background: var(--rice); color: white; border: none; font-weight: 700; font-size: 16px; padding: 14px 48px; border-radius: 40px; cursor: pointer; letter-spacing: 0.05em; font-family: 'Noto Sans JP', sans-serif; transition: transform 0.2s, opacity 0.2s; }
+  .submit-btn:hover { transform: translateY(-2px); opacity: 0.92; }
+  .contact-info { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 32px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.15); }
+  .contact-info-item { text-align: center; }
+  .contact-info-label { font-size: 11px; letter-spacing: 0.15em; color: rgba(255,255,255,0.5); margin-bottom: 6px; text-transform: uppercase; }
+  .contact-info-value { font-size: 18px; font-weight: 700; color: #B8E878; font-family: 'Noto Serif JP', serif; }
+  .contact-info-value a { color: #B8E878; text-decoration: none; }
+
+  footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text-light); border-top: 1px solid #E8DDD0; }
+  footer strong { display: block; font-size: 14px; color: var(--text-mid); margin-bottom: 4px; font-family: 'Noto Serif JP', serif; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    株式会社おだじん
+    <span>DRONE AGRI SERVICE</span>
+  </div>
+  <a href="#contact" class="nav-cta">まずはご相談を</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">津軽地域 対応 ｜ DJI Agras T50</div>
+    <h1>ドローンで、農薬散布を<br><span>もっとラクに。</span></h1>
+    <p>津軽の田んぼ・畑を、最新の農業ドローン DJI Agras T50 で丁寧に散布します。まずはお気軽にご相談ください。</p>
+    <a href="#contact" class="hero-cta">散布のご相談はこちら →</a>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="tag-row">
+    <span class="tag">GPS精密飛行</span>
+    <span class="tag">まずはお気軽にご相談を</span>
+    <span class="tag">農薬持込みOK</span>
+    <span class="tag">津軽地域密着</span>
+  </div>
+  <p class="section-label">機体スペック</p>
+  <h2 class="section-title">DJI Agras T50 について</h2>
+  <p class="section-sub">農業用ドローンのフラッグシップモデル。大容量タンクと高精度GPSで、広大な圃場を効率よくカバーします。</p>
+
+  <div class="spec-bar">
+    <div class="spec-item">
+      <div class="spec-num">50<span class="spec-unit">kg</span></div>
+      <div class="spec-label">最大積載重量</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">40<span class="spec-unit">L</span></div>
+      <div class="spec-label">液剤タンク容量</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">50<span class="spec-unit">kg</span></div>
+      <div class="spec-label">粒剤ホッパー容量</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">9<span class="spec-unit">m</span></div>
+      <div class="spec-label">散布幅（最大）</div>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⏱</div>
+      <h3>作業時間を大幅削減</h3>
+      <p>広い圃場でも短時間で散布完了。忙しい農繁期の強い味方です。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <h3>均一で精密な散布</h3>
+      <p>GPSと自動飛行制御により、ムラのない均一な散布を実現します。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧑‍🌾</div>
+      <h3>体への負担ゼロ</h3>
+      <p>高齢化・人手不足に悩む農家様の作業負担を根本から解決します。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>農薬の持込み可能</h3>
+      <p>お客様がご用意した農薬も対応可能。薬剤代の節約ができます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATOR -->
+<div style="padding: 0 24px;">
+  <div class="operator-wrap">
+    <img class="operator-photo" src="IMG_202605301004081.jpg" alt="代表オペレーター 小田桐仁義">
+    <div class="operator-info">
+      <p class="section-label">オペレーター紹介</p>
+      <div class="operator-name">小田桐 仁義</div>
+      <div class="operator-name-en">ODAGIRI JINGI</div>
+      <div class="operator-badges">
+        <span class="operator-badge">無人ヘリ・ドローン歴15年以上</span>
+        <span class="operator-badge green">2010年〜現役稼働中</span>
+      </div>
+      <p class="operator-desc">
+        2010年から無人ヘリコプターによる農薬散布を開始し、15年以上にわたって津軽の農家を支えてきました。時代とともに機材をアップデートし、現在は最新鋭のDJI Agras T50で対応しています。豊富な経験と地域への深い理解が、安心・安全な散布作業の土台です。
+      </p>
+      <div class="operator-quote">小田桐が、親切・丁寧に担当いたします。</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE -->
+<div style="padding: 0 24px; max-width: 820px; margin: 0 auto 64px;">
+  <div class="price-section">
+    <p class="section-label" style="color: var(--soil);">料金案内</p>
+    <h2 class="section-title">散布料金表</h2>
+    <p class="price-note">※ 料金は10a（1反歩）あたりの散布料金です。農薬代は別途となります。まずはお気軽にご相談ください。</p>
+    <div class="price-cards">
+      <div class="price-card">
+        <div class="price-card-badge">液剤</div>
+        <div class="price-card-icon">
+          <svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4 C20 4 4 22 4 32 C4 41 11.2 46 20 46 C28.8 46 36 41 36 32 C36 22 20 4 20 4Z" fill="#B8D9F0" stroke="#4A90C4" stroke-width="2"/>
+            <ellipse cx="14" cy="30" rx="3" ry="5" fill="rgba(255,255,255,0.5)" transform="rotate(-20 14 30)"/>
+          </svg>
+        </div>
+        <div class="price-card-name">液剤散布</div>
+        <div class="price-card-sub">殺虫・殺菌・除草剤など</div>
+        <div class="price-card-amount">1,800<span>円〜</span></div>
+        <div class="price-card-unit">10a（1反歩）あたり</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-badge" style="background: var(--soil);">粒剤</div>
+        <div class="price-card-icon">
+          <svg width="52" height="48" viewBox="0 0 52 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="12" cy="34" rx="8" ry="7" fill="#C4956A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="26" cy="38" rx="9" ry="7.5" fill="#D4A87A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="40" cy="34" rx="8" ry="7" fill="#C4956A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="19" cy="22" rx="7.5" ry="6.5" fill="#DEB98A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="33" cy="22" rx="7.5" ry="6.5" fill="#C4956A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="26" cy="10" rx="7" ry="6" fill="#D4A87A" stroke="#8B6040" stroke-width="1.5"/>
+            <ellipse cx="23" cy="8" rx="2" ry="1.5" fill="rgba(255,255,255,0.4)"/>
+            <ellipse cx="16" cy="20" rx="2" ry="1.5" fill="rgba(255,255,255,0.35)"/>
+            <ellipse cx="10" cy="32" rx="2" ry="1.5" fill="rgba(255,255,255,0.35)"/>
+          </svg>
+        </div>
+        <div class="price-card-name">粒剤散布</div>
+        <div class="price-card-sub">肥料・除草剤（粒剤）など</div>
+        <div class="price-card-amount">3,000<span>円〜</span></div>
+        <div class="price-card-unit">10a（1反歩）あたり</div>
+      </div>
+    </div>
+    <div class="area-wrap">
+      <h3>🗾 対応エリア</h3>
+      <p>主な対応エリアは<strong>青森県つがる市・五所川原市周辺</strong>です。エリア外の場合はご相談ください。出張費が発生する場合があります。</p>
+    </div>
+  </div>
+</div>
+
+<!-- FLOW -->
+<section id="flow">
+  <p class="section-label">ご依頼の流れ</p>
+  <h2 class="section-title">申し込みから散布まで</h2>
+  <p class="section-sub">初めての方でも安心してご依頼いただけます。</p>
+  <div class="flow-list">
+    <div class="flow-item">
+      <div class="flow-num">1</div>
+      <div class="flow-content"><h3>お問い合わせ・無料相談</h3><p>フォームまたはお電話にてご連絡ください。圃場の広さや散布内容など、まずはお気軽にご相談ください。</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">2</div>
+      <div class="flow-content"><h3>現地確認・お見積もり</h3><p>圃場を確認し、正式なお見積もりをご提示します。日程も合わせて調整いたします。</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">3</div>
+      <div class="flow-content"><h3>農薬の準備</h3><p>お客様がご用意いただく場合、使用農薬の種類・希釈倍率をご確認ください。こちらで手配することも可能です。</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">4</div>
+      <div class="flow-content"><h3>ドローン散布の実施</h3><p>当日、圃場にてドローンによる農薬散布を行います。安全確認後に飛行開始します。</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">5</div>
+      <div class="flow-content"><h3>完了報告・お支払い</h3><p>散布完了後に報告書をお渡しします。お支払いは振込にて承ります。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div style="padding: 0 24px; max-width: 820px; margin: 0 auto;" id="contact">
+  <div class="contact-wrap">
+    <p class="section-label">お問い合わせ</p>
+    <h2 class="section-title" style="font-size:26px;">まずはお気軽にご相談ください</h2>
+    <p class="section-sub">散布のご依頼・お見積もり依頼はこちらから。</p>
+    <div class="contact-grid">
+      <input type="text" placeholder="お名前（例：田中 太郎）">
+      <input type="tel" placeholder="電話番号">
+      <input type="text" placeholder="所在地（例：つがる市◯◯町）">
+      <input type="text" placeholder="圃場の広さ（例：5反）">
+    </div>
+    <div class="contact-full">
+      <textarea placeholder="散布内容・希望時期・その他ご要望など（任意）"></textarea>
+    </div>
+    <button class="submit-btn">送信する →</button>
+    <div class="contact-info">
+      <div class="contact-info-item">
+        <div class="contact-info-label">Email</div>
+        <div class="contact-info-value"><a href="mailto:odajinwork@gmail.com">odajinwork@gmail.com</a></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-label">Tel</div>
+        <div class="contact-info-value"><a href="tel:09036411783">090-3641-1783</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>株式会社おだじん</strong>
+  青森県つがる市 ｜ ドローン農薬散布サービス<br>
+  © 2025 株式会社おだじん. All rights reserved.
+</footer>
+
+</body>
+</html>
